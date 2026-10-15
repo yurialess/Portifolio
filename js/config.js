@@ -12,9 +12,9 @@ const CONFIG = {
   frase:
     "Transformo ideias em sites rápidos, bonitos e prontos para vender, com pagamento online e automações.",
 
-  // FOTO: coloque sua foto em imagens/foto.jpg (quadrada fica melhor).
+  // FOTO: coloque sua foto na pasta "imagens" e escreva o caminho aqui.
   // Se não tiver foto, deixe "" que aparece a sua inicial com animação.
-  foto: "imagens/foto.jpg",
+  foto: "imagens/fotoyuri.jpg",
 
   sobre:
     "Sou desenvolvedor web focado em criar sites e lojas virtuais completas: do visual ao pagamento online, " +
