@@ -162,20 +162,31 @@ if ($("lista-projetos")) {
   h1.innerHTML = `<span class="nome-gradiente"></span>`;
   setTimeout(() => decodificar(h1.firstChild, nomeTodo + ".", 1500), 250);
 
-  // Palavras digitando
-  (function digitar() {
-    const el = $("digitando");
-    const palavras = CONFIG.digitando;
-    let p = 0, l = 0, apagando = false;
-    function tick() {
-      const palavra = palavras[p];
-      el.textContent = palavra.slice(0, l);
-      if (!apagando && l < palavra.length) { l++; setTimeout(tick, 70); }
-      else if (!apagando) { apagando = true; setTimeout(tick, 1600); }
-      else if (l > 0) { l--; setTimeout(tick, 35); }
-      else { apagando = false; p = (p + 1) % palavras.length; setTimeout(tick, 300); }
+  // Palavras subindo com desvanecer: a atual sobe e some, a próxima entra por baixo
+  (function palavrasSubindo() {
+    const caixa = $("digitando");
+    const spans = CONFIG.digitando.map((t) => {
+      const s = document.createElement("span");
+      s.className = "palavra"; s.textContent = t;
+      caixa.appendChild(s);
+      return s;
+    });
+    let atual = 0;
+    const ajustarLargura = () => { caixa.style.width = spans[atual].offsetWidth + "px"; };
+
+    function mostrar(i) {
+      spans.forEach((s) => s.classList.remove("saindo"));
+      spans[atual].classList.remove("ativa");
+      if (i !== atual) spans[atual].classList.add("saindo");
+      atual = i;
+      spans[atual].classList.add("ativa");
+      ajustarLargura();
     }
-    setTimeout(tick, 1600);
+    addEventListener("resize", ajustarLargura);
+    setTimeout(() => mostrar(0), 1500);
+    if (!semMovimento && spans.length > 1) {
+      setTimeout(() => setInterval(() => mostrar((atual + 1) % spans.length), 2800), 1500);
+    }
   })();
 
   $("frase").textContent = CONFIG.frase;

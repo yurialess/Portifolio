@@ -98,10 +98,32 @@ main, .rodape { max-width: var(--largura); margin: 0 auto; padding: 0 16px; }
 /* letras embaralhadas durante a animação de decodificar */
 .embaralhada { color: var(--azul); -webkit-text-fill-color: var(--azul); opacity: .85; }
 
-.digitando { font-family: "Sora", sans-serif; font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 600; min-height: 1.6em; }
+.digitando {
+  font-family: "Sora", sans-serif; font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 600;
+  display: flex; align-items: center; gap: .35em; flex-wrap: wrap; line-height: 1.65;
+}
 .destaque { color: var(--azul-claro); }
-.cursor { color: var(--azul); animation: piscar 1s steps(1) infinite; margin-left: 2px; }
-@keyframes piscar { 50% { opacity: 0; } }
+
+/* Palavras que sobem com desvanecer */
+.rotativo {
+  position: relative; display: inline-block; height: 1.65em; overflow: hidden;
+  transition: width .6s cubic-bezier(.65,0,.35,1);
+}
+.rotativo .palavra {
+  position: absolute; left: 0; top: 0; white-space: nowrap; line-height: 1.65em;
+  color: var(--azul-claro);
+  opacity: 0; transform: translateY(100%); filter: blur(8px);
+  transition: opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1), filter .9s ease;
+}
+.rotativo .palavra::after { /* traço azul que se desenha */
+  content: ""; position: absolute; left: 0; right: 0; bottom: .12em; height: 2px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--azul), var(--azul-claro));
+  transform: scaleX(0); transform-origin: left; transition: transform .8s .35s cubic-bezier(.65,0,.35,1);
+}
+.rotativo .palavra.ativa { opacity: 1; transform: none; filter: none; }
+.rotativo .palavra.ativa::after { transform: scaleX(1); }
+.rotativo .palavra.saindo { opacity: 0; transform: translateY(-100%); filter: blur(8px); }
+.rotativo .palavra.saindo::after { transform: scaleX(0); transform-origin: right; transition-delay: 0s; }
 .frase { color: var(--texto-suave); font-size: 1.08rem; max-width: 52ch; margin: 18px 0 32px; }
 
 /* ---------- Botões ---------- */
