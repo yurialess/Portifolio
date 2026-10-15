@@ -95,8 +95,14 @@ main, .rodape { max-width: var(--largura); margin: 0 auto; padding: 0 16px; }
   animation: fluxo 7s linear infinite;
 }
 @keyframes fluxo { to { background-position: 300% 0; } }
-/* letras embaralhadas durante a animação de decodificar */
-.embaralhada { color: var(--azul); -webkit-text-fill-color: var(--azul); opacity: .85; }
+/* Letras do nome subindo uma por uma */
+.letra-sobe {
+  display: inline-block; opacity: 0; transform: translateY(70%); filter: blur(10px);
+  animation: sobe 1s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes sobe { to { opacity: 1; transform: none; filter: blur(0); } }
+/* durante a subida, as letras usam cores próprias (o degradê liga no final) */
+.nome-gradiente.animando { background: none; -webkit-background-clip: initial; background-clip: initial; color: var(--texto); animation: none; }
 
 .digitando {
   font-family: "Sora", sans-serif; font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 600;
@@ -324,5 +330,5 @@ main, .rodape { max-width: var(--largura); margin: 0 auto; padding: 0 16px; }
 /* Respeita quem prefere menos movimento */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .revela { opacity: 1; transform: none; filter: none; }
+  .revela, .letra-sobe { opacity: 1; transform: none; filter: none; }
 }

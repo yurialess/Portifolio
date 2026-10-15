@@ -94,26 +94,32 @@ addEventListener("scroll", () => topo.classList.toggle("rolou", scrollY > 30), {
 })();
 
 // =============================================
-// ANIMAÇÃO 2 — Texto "decodificando" (letras embaralhadas até formar a palavra)
+// ANIMAÇÃO 2b — Letras subindo uma por uma com desvanecer
 // =============================================
-function decodificar(el, textoFinal, duracao = 1400) {
-  const simbolos = "ABCDEFGHIJKLMNOPQRSTUVWXYZ<>/{}[]=+*#$%&01";
-  if (semMovimento) { el.textContent = textoFinal; return; }
-  const inicio = performance.now();
-  function passo(agora) {
-    const prog = Math.min((agora - inicio) / duracao, 1);
-    const fixas = Math.floor(prog * textoFinal.length);
-    let s = "";
-    for (let i = 0; i < textoFinal.length; i++) {
-      const c = textoFinal[i];
-      if (i < fixas || c === " ") s += c;
-      else s += `<span class="embaralhada">${simbolos[Math.floor(Math.random() * simbolos.length)]}</span>`;
-    }
-    el.innerHTML = s;
-    if (prog < 1) requestAnimationFrame(passo);
-    else el.textContent = textoFinal;
+// cores: lista de cores para pintar as letras durante a animação (degradê)
+function letrasSubindo(el, texto, atrasoInicial = 0, intervalo = 70, cores = null) {
+  const letras = [...texto];
+  el.innerHTML = "";
+  if (cores) el.classList.add("animando");
+  letras.forEach((c, i) => {
+    const s = document.createElement("span");
+    s.className = "letra-sobe";
+    s.textContent = c === " " ? " " : c;
+    s.style.animationDelay = (semMovimento ? 0 : atrasoInicial + i * intervalo) + "ms";
+    if (cores) s.style.color = misturar(cores, letras.length > 1 ? i / (letras.length - 1) : 0);
+    el.appendChild(s);
+  });
+  if (cores) {
+    // quando a última letra terminar, liga o degradê que corre pelo nome
+    const fim = semMovimento ? 0 : atrasoInicial + (letras.length - 1) * intervalo + 1000;
+    setTimeout(() => { el.classList.remove("animando"); el.textContent = texto; }, fim);
   }
-  requestAnimationFrame(passo);
+}
+function misturar(cores, t) {
+  const hex = (h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16));
+  const pos = t * (cores.length - 1), i = Math.min(Math.floor(pos), cores.length - 2), f = pos - i;
+  const a = hex(cores[i]), b = hex(cores[i + 1]);
+  return `rgb(${a.map((v, k) => Math.round(v + (b[k] - v) * f)).join(",")})`;
 }
 
 // =============================================
@@ -156,11 +162,11 @@ function ativarLuz() {
 if ($("lista-projetos")) {
   document.title = `${CONFIG.nome} · ${CONFIG.funcao}`;
 
-  // Nome decodificando
+  // Nome: letras subindo com desvanecer
   const h1 = $("nome-completo");
   const nomeTodo = [CONFIG.nome, CONFIG.sobrenome].filter(Boolean).join(" ");
   h1.innerHTML = `<span class="nome-gradiente"></span>`;
-  setTimeout(() => decodificar(h1.firstChild, nomeTodo + ".", 1500), 250);
+  letrasSubindo(h1.firstChild, nomeTodo + ".", 200, 90, ["#ffffff", "#6ea2ff", "#2b6cff"]);
 
   // Palavras subindo com desvanecer: a atual sobe e some, a próxima entra por baixo
   (function palavrasSubindo() {
@@ -302,7 +308,7 @@ if ($("pagina-projeto")) {
         ${linkWhats() ? `<a class="botao" href="${linkWhats()}" target="_blank" rel="noopener">Pedir orçamento <span class="seta">→</span></a>` : ""}
       </div>`;
 
-    decodificar($("titulo-projeto"), p.nome, 1000);
+    letrasSubindo($("titulo-projeto"), p.nome, 100, 45);
 
     // Clique na imagem para ampliar
     const zoom = $("zoom");
