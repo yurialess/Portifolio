@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfólio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <a href="index.html" class="logo" id="logo"></a>
+    <nav>
+      <a href="#projetos">Projetos</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="etiqueta" id="funcao"></p>
+      <h1 id="frase"></h1>
+      <div class="hero-botoes">
+        <a href="#projetos" class="botao">Ver projetos</a>
+        <a href="#" class="botao botao-vazio" id="hero-whats" target="_blank" rel="noopener">Falar no WhatsApp</a>
+      </div>
+    </section>
+
+    <section id="projetos" class="secao">
+      <h2>Projetos</h2>
+      <div class="grade" id="lista-projetos"></div>
+    </section>
+
+    <section id="sobre" class="secao">
+      <h2>Sobre</h2>
+      <p class="texto-sobre" id="texto-sobre"></p>
+    </section>
+
+    <section id="contato" class="secao">
+      <h2>Contato</h2>
+      <p>Quer um site ou uma loja virtual? Me chama:</p>
+      <div class="contatos" id="contatos"></div>
+    </section>
+  </main>
+
+  <footer class="rodape" id="rodape"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/projetos.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
